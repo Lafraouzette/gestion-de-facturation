@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Modifier Utilisateur</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<div th:insert="partials/navbar::navbar"></div>
+
+<div class="container mx-auto mt-8">
+    <h2 class="text-2xl font-bold mb-4">Modifier l'utilisateur</h2>
+    <form th:action="@{/users/update/{id}(id=${user.id})}" th:object="${user}"  method="post" class="space-y-6 bg-white p-6 shadow-md rounded">
+        <div>
+            <label for="username" class="block text-gray-700 font-medium">Nom d'utilisateur</label>
+            <input id="username" name="username" type="text" th:value="${user.username}"
+                   class="mt-1 block w-full border border-gray-300 rounded shadow-sm py-1.5 px-1">
+        </div>
+        <div>
+            <label for="email" class="block text-gray-700 font-medium">Email</label>
+            <input id="email" name="email" type="email" th:value="${user.email}"
+                   class="mt-1 block w-full border border-gray-300 rounded shadow-sm py-1.5 px-1">
+        </div>
+        <div>
+            <label for="password" class="block text-gray-700 font-medium">Password</label>
+            <input id="password" name="password" type="text" th:value="${user.password}"
+                   class="mt-1 block w-full border border-gray-300 rounded shadow-sm py-1.5 px-1">
+        </div>
+        <div>
+            <label for="role" class="block text-gray-700 font-medium">Rôle</label>
+            <select id="role" name="role"
+                    class="mt-1 block w-full border border-gray-300 rounded shadow-sm py-1.5 px-1">
+
+                <option th:each="role : ${ {'USER', 'ADMIN'} }" th:value="${role}" th:text="${role}"
+                        th:selected="${user.role.name() == role}"></option>
+            </select>
+        </div>
+        <div>
+            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+                Enregistrer
+            </button>
+            <a href="/admin/users" class="ml-4 text-blue-500 hover:text-blue-700">Retour à la liste</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

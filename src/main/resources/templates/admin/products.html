@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+<div th:insert="partials/navbar::navbar"></div>
+
+<div class="container mx-auto p-4">
+    <div class="bg-white shadow-md rounded-lg p-2 mb-1">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-bold">Produits</h1>
+            <a href="/admin/products/new" class="bg-green-500 text-white px-2 py-1 rounded-none hover:bg-green-600">
+                <i class="fas fa-plus"></i> Ajouter
+            </a>
+        </div>
+        <div class="mb-2">
+            <label class="block text-sm font-medium text-gray-700">Filtrer par Type</label>
+            <select id="filter" class="mt-1 block w-full px-4 py-2 border rounded shadow-sm">
+                <option value="ALL">All</option>
+                <option value="ARTICLE">Article</option>
+                <option value="SERVICE">Service</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg p-3">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">TVA</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock Quantity</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+            <tr th:each="product : ${products}">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900" th:text="${product.name}"></td>
+                <td class="px-6 py-4 text-sm text-gray-500" th:text="${product.price}"></td>
+                <td class="px-6 py-4 text-sm text-gray-500" th:text="${product.tva}"></td>
+                <td class="px-6 py-4 text-sm text-gray-500" th:text="${product.quantiteStock}"></td>
+                <td class="px-6 py-4 text-sm">
+                    <span th:if="${product.type.name().equals('ARTICLE')}" class="px-2 py-1 text-xs font-semibold bg-cyan-100 text-cyan-800 rounded-full">ARTICLE</span>
+                    <span th:if="${product.type.name().equals('SERVICE')}" class="px-2 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded-full">SERVICE</span>
+                </td>
+                <td class="px-6 py-4 text-sm">
+                    <a th:href="@{/admin/products/edit/{id}(id=${product.id})}" class="text-lg text-blue-500 hover:text-blue-700">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a th:href="@{/admin/products/delete/{id}(id=${product.id})}" class="text-lg text-red-500 hover:text-red-700 ml-4">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="flex justify-between items-center mt-4">
+            <div class="text-sm text-gray-700">
+                Showing
+                <span th:text="${currentPage * 5 + 1}"></span> to
+                <span th:text="${T(java.lang.Math).min((currentPage + 1) * 5, totalItems.intValue())}"></span> of
+                <span th:text="${totalItems}"></span> results
+            </div>
+            <div class="flex space-x-2">
+                <a th:href="@{/admin/products(filter=${filter}, page=${currentPage - 1}, size=5)}"
+                   th:if="${currentPage > 0}"
+                   class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                <a th:href="@{/admin/products(filter=${filter}, page=${currentPage + 1}, size=5)}"
+                   th:if="${currentPage < totalPages - 1}"
+                   class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('filter').addEventListener('change', function () {
+        const filter = this.value;
+        window.location.href = `/admin/products?filter=${filter}&page=0&size=5`;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Commandes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<div th:insert="partials/navbar::navbar"></div>
+
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Manage Commandes</h1>
+
+    <div th:if="${not #lists.isEmpty(commandes)}" class="bg-white shadow-md rounded-lg p-6">
+        <div th:each="commande : ${commandes}" class="mb-4 border-b pb-4">
+            <h2 class="text-xl font-bold text-gray-800" th:text="'Commande ID: ' + ${commande.id}"></h2>
+            <p class="text-gray-600" th:text="'Status: ' + ${commande.status}"></p>
+            <p class="text-gray-600" th:text="'Client: ' + ${commande.client.name}"></p>
+            <p class="text-gray-600" th:text="'Total: MAD' + ${commande.getTotal()}"></p>
+
+            <form th:action="@{/admin/commandes/confirm/{id}(id=${commande.id})}" method="post" class="mt-2">
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                    Confirm Commande
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(commandes)}" class="bg-white shadow-md rounded-lg p-6">
+        <p class="text-gray-800">No pending commandes.</p>
+    </div>
+</div>
+</body>
+</html>

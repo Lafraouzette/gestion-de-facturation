@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gérer les clients</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+<div th:insert="partials/navbar::navbar"></div>
+
+<div class="container mx-auto p-4">
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <div class="bg-green-600 text-white px-6 py-4">
+            <h2 class="text-2xl font-bold">Liste des clients</h2>
+        </div>
+
+        <div class="p-6">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-green-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Nom</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">City</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Phone</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
+                </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                <tr th:each="client : ${clients}" class="hover:bg-gray-50">
+                    <td class="px-6 py-4 text-sm text-gray-900" th:text="${client.id}"></td>
+                    <td class="px-6 py-4 text-sm text-gray-900" th:text="${client.name}"></td>
+                    <td class="px-6 py-4 text-sm text-gray-900" th:text="${client.city}"></td>
+                    <td class="px-6 py-4 text-sm text-gray-900" th:text="${client.phone}"></td>
+                    <td class="px-6 py-4 text-sm">
+                        <a th:href="@{/clients/update/{id}(id=${client.id})}"
+                           class="text-yellow-500 hover:text-yellow-700 mr-2">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a th:href="@{/clients/delete/{id}(id=${client.id})}"
+                           class="text-red-500 hover:text-red-700">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

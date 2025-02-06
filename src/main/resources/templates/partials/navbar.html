@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="navbar" class="bg-[#1C1C1C] text-white shadow">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <h1 class="text-lg font-bold">Invoice Management</h1>
+
+        <div th:if="${session.loggedInUser.role.name() == 'ADMIN'}" class="flex items-center space-x-4">
+            <a th:href="@{/admin/dashboard}" class="text-white text-md font-extrabold hover:underline">
+                Dashboard
+            </a>
+            <a th:href="@{/admin/users}" class="text-white font-semibold text-sm hover:underline">
+                Users
+            </a>
+            <a th:href="@{/admin/clients}" class="text-white font-semibold text-sm hover:underline">
+                Clients
+            </a>
+            <a th:href="@{/admin/products}" class="text-white font-semibold text-sm hover:underline">
+                Produits
+            </a>
+            <a th:href="@{/factures}" class="text-white font-semibold text-sm hover:underline">
+                Factures
+            </a>
+        </div>
+
+        <div th:if="${session.loggedInUser.role.name() == 'USER'}" class="flex items-center space-x-4">
+            <a th:href="@{/users/panier}" class="text-white text-md font-extrabold hover:underline">
+                Panier
+            </a>
+            <a th:href="@{/factures}" class="text-white font-semibold text-sm hover:underline">
+                Factures
+            </a>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <span th:if="${session.loggedInUser}" class="text-sm">
+                Welcome, <span th:text="${session.loggedInUser.username}">Username</span> (
+                <span th:text="${session.loggedInUser.role}">Role</span>)
+            </span>
+
+            <form th:action="@{/users/logout}" method="post">
+                <button type="submit"
+                        class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">
+                    Logout
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</html>

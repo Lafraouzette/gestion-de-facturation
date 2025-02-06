@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<div th:insert="partials/navbar::navbar"></div>
+
+<div class="flex">
+    <div class="w-64 h-full bg-white shadow-md p-6">
+        <h2 class="text-lg font-bold text-gray-800 mb-4">Filters</h2>
+
+        <form th:action="@{/home}" method="get">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700">Max Price (MAD)</label>
+                <input type="number" name="maxPrice" th:value="${maxPrice}" class="mt-1 block w-full px-4 py-2 border rounded shadow-sm">
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700">Product Type</label>
+                <select name="type" class="mt-1 block w-full px-4 py-2 border rounded shadow-sm">
+                    <option value="ALL">All</option>
+                    <option th:each="type : ${T(dev.kad.invoicemanagement.model.enums.ProductsType).values()}"
+                            th:value="${type}"
+                            th:text="${type}"
+                            th:selected="${type == filterType}"></option>
+                </select>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Apply Filters
+            </button>
+        </form>
+    </div>
+
+    <div class="flex-1 p-6 bg-gray-50">
+        <h1 class="text-3xl font-extrabold text-gray-800 mb-8">Product Details</h1>
+        <div class="bg-white shadow-lg rounded-lg p-6">
+            <!-- Back Button -->
+            <a th:href="@{/home}"
+               class="mb-6 inline-block bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition">
+                Back to Products
+            </a>
+
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4" th:text="${product.name}"></h2>
+            <div class="space-y-2">
+                <p class="text-gray-700 text-sm" th:text="'Price: MAD ' + ${product.price}"></p>
+                <p class="text-gray-700 text-sm" th:text="'TVA: ' + ${product.tva} + '%'"></p>
+                <p class="text-gray-700 text-sm" th:text="'Stock: ' + ${product.quantiteStock}"></p>
+                <p class="text-gray-700 text-sm" th:text="'Type: ' + ${product.type}"></p>
+            </div>
+
+            <div th:if="${not #lists.isEmpty(product.fournisseurs)}" class="mt-6">
+                <p class="text-gray-700 text-sm font-medium">Fournisseurs:</p>
+                <ul class="list-disc list-inside text-gray-700 text-sm space-y-1 pl-4">
+                    <li th:each="fournisseur : ${product.fournisseurs}" th:text="${fournisseur.name}"></li>
+                </ul>
+            </div>
+
+            <form th:action="@{/users/panier/add}" method="post">
+                <input type="hidden" name="productId" th:value="${product.id}">
+                <div class="mt-6">
+                    <label for="orderQuantity" class="block text-sm font-medium text-gray-700">
+                        Quantity
+                    </label>
+                    <input type="number" id="orderQuantity" name="quantite" min="0" required
+                           class="mt-2 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div class="mt-8 flex justify-end space-x-4">
+                    <button type="submit"
+                            class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition">
+                        Place Order
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

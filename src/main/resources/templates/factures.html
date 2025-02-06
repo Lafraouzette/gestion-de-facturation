@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Factures</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<div th:insert="partials/navbar::navbar"></div>
+<div class="container mx-auto p-4">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">Factures</h1>
+
+  <div th:if="${not #lists.isEmpty(factures)}" class="bg-white shadow-md rounded-lg p-6">
+    <div th:each="facture : ${factures}" class="mb-4">
+      <h2 class="text-xl font-bold text-gray-800" th:text="'Facture Reference: ' + ${facture.reference}"></h2>
+      <p class="text-gray-600" th:text="'Date: ' + ${facture.date}"></p>
+      <p class="text-gray-600" th:text="'Total: MAD' + ${facture.total}"></p>
+      <p class="text-gray-600" th:text="'Status: ' + ${facture.status}"></p>
+      <div th:if="${facture.commande != null}">
+        <p class="text-gray-600" th:text="'Client: ' + ${facture.commande.client.name}"></p>
+      </div>
+      <div th:if="${facture.paiement != null}">
+        <p class="text-gray-600" th:text="'Payment Mode: ' + ${facture.paiement.mode}"></p>
+        <p class="text-gray-600" th:text="'Payment Amount: MAD' + ${facture.paiement.montant}"></p>
+        <p th:if="${facture.paiement.banque != null}" class="text-gray-600" th:text="'Bank: ' + ${facture.paiement.banque}"></p>
+        <p th:if="${facture.paiement.chequeRef != null}" class="text-gray-600" th:text="'Cheque Reference: ' + ${facture.paiement.chequeRef}"></p>
+      </div>
+    </div>
+  </div>
+
+  <div th:if="${#lists.isEmpty(factures)}" class="bg-white shadow-md rounded-lg p-6">
+    <p class="text-gray-800">No invoices found.</p>
+  </div>
+</div>
+</body>
+</html>
